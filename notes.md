@@ -13,7 +13,7 @@
 - [Part 7: Graph Intelligence & Fund-Flow Traversal Engines](#part-7-graph-intelligence--fund-flow-traversal-engines)
 - [Part 8: Unsupervised Anomaly Intelligence & Behavioral Drift](#part-8-unsupervised-anomaly-intelligence--behavioral-drift)
 - [Part 9: Composite Risk Scoring & Evidence Fusion Engine](#part-9-composite-risk-scoring--evidence-fusion-engine)
-- [Part 10: Production Serving, REST API & Investigator Web Dashboard](#part-10-production-serving-rest-api--investigator-web-dashboard)
+- [Part 10: Production Serving & REST API Engine](#part-10-production-serving--rest-api-engine)
 
 ---
 
@@ -278,9 +278,9 @@ Outputs clear, human-readable evidence strings without making unverified identit
 
 ---
 
-## Part 10: Production Serving, REST API & Investigator Web Dashboard
+## Part 10: Production Serving & REST API Engine
 
-**Files**: `src/model_serving.py`, `serve_models.py`, `app.py`
+**Files**: `src/model_serving.py`, `serve_models.py`
 
 ### 10.1 Production Serving Architecture & REST API
 Exposes lightweight REST endpoints via Python's built-in `HTTPServer`:
@@ -292,12 +292,11 @@ GET  /models             ──► ModelRegistry   ──► Loaded Artifacts─
 GET  /health             ──► Healthcheck     ──► Status 200      ──► JSON Response
 ```
 
-### 10.2 Investigator Interactive Web Application (`app.py`)
-Streamlit dashboard providing 4 interactive views:
-1. **🔍 Address Threat Profiler**: Custom and preset address risk profiling with metric displays and evidence trails.
-2. **🕸️ Graph Fund-Flow Tracer**: Interactive directed transaction graph visualizer with peel-chain detection.
-3. **⚡ Multi-Chain Log Ingestion**: Real-time UTXO (Bitcoin) and Account (Ethereum) schema normalization engine.
-4. **📊 Model Architecture & Benchmarks**: Real-time system metrics and multi-model benchmark tables.
+### 10.2 Inference Engine & Model Registry Workflows
+- **`ModelRegistry`**: Loads joblib tabular models, scaler metadata, and TorchScript GNN modules from `exported_models/`.
+- **`InferenceEngine`**: High-throughput production inference handler supporting low-latency predictions across small, medium, large, and deep models.
+- **`ServingAPIHandler`**: Base HTTP handler receiving JSON payloads and returning risk scores, latency metrics, and evidence trails.
+
 
 ---
 

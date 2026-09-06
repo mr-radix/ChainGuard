@@ -22,7 +22,7 @@
 5. **Composite Risk Scoring & Evidence Fusion:** Fuses all model and graph signals into an explainable Risk Report (MINIMAL, LOW, MEDIUM, HIGH) with supporting evidence lists without making unverified identity claims.
 6. **Multi-Chain Normalization:** Ingests UTXO (BTC, LTC) and Account-based (ETH) transaction feeds into a unified schema.
 7. **Small-to-Big Model Spectrum:** Benchmarking suite across 5 model tiers (DecisionTree, LogisticRegression, RandomForest, XGBoost, Deep MLP).
-8. **Interactive Dashboard & REST API:** Command-line model trainer (`train.py`), model export & REST server (`serve_models.py`), and rich investigator web interface (`app.py`).
+8. **CLI Trainer & REST Serving API:** Command-line model trainer (`train.py`) and model export & REST server (`serve_models.py`).
 
 ---
 
@@ -63,8 +63,26 @@
                  Composite Risk Scoring & Evidence Fusion
                                    │
                                    ▼
-             Investigator Dashboard (Streamlit) & CLI API
+                    CLI Trainer & REST Serving API
 ```
+
+---
+
+## 📘 10-Part Master Technical Notes & Deep-Dive Guide
+
+For the full architectural specification, technical equations, mathematical formulations, and detailed Q&A, refer to **[notes.md](notes.md)**:
+
+- **[Part 1: Executive Overview & System Architecture](notes.md#part-1-executive-overview--system-architecture)**
+- **[Part 2: The Cryptocurrency Threat Landscape & Domain Challenges](notes.md#part-2-the-cryptocurrency-threat-landscape--domain-challenges)**
+- **[Part 3: Multi-Chain Ingestion & Data Normalization Engine](notes.md#part-3-multi-chain-ingestion--data-normalization-engine)**
+- **[Part 4: Feature Engineering & Behavioral Address Profiling](notes.md#part-4-feature-engineering--behavioral-address-profiling)**
+- **[Part 5: Dual-Head Tabular Ransomware Classifier & Model Spectrum](notes.md#part-5-dual-head-tabular-ransomware-classifier--model-spectrum)**
+- **[Part 6: Temporal Graph Neural Network for Illicit Node Detection](notes.md#part-6-temporal-graph-neural-network-for-illicit-node-detection)**
+- **[Part 7: Graph Intelligence & Fund-Flow Traversal Engines](notes.md#part-7-graph-intelligence--fund-flow-traversal-engines)**
+- **[Part 8: Unsupervised Anomaly Intelligence & Behavioral Drift](notes.md#part-8-unsupervised-anomaly-intelligence--behavioral-drift)**
+- **[Part 9: Composite Risk Scoring & Evidence Fusion Engine](notes.md#part-9-composite-risk-scoring--evidence-fusion-engine)**
+- **[Part 10: Production Serving & REST API Engine](notes.md#part-10-production-serving-rest-api--investigator-web-dashboard)**
+
 ---
 
 ## 🚀 Quickstart Guide
@@ -112,14 +130,6 @@ python3 serve_models.py --export-only --data-dir Dataset
 python3 serve_models.py --serve --port 8080
 ```
 
-### 5. Launch Investigator Web Dashboard
-
-Launch the interactive Streamlit dashboard:
-
-```bash
-streamlit run app.py
-```
-
 ---
 
 ## 🔌 REST API Endpoints
@@ -158,7 +168,6 @@ ChainGuard/
 ├── requirements.txt                  # Python dependencies
 ├── train.py                          # CLI model training entrypoint
 ├── serve_models.py                  # CLI model export & HTTP REST API server
-├── app.py                            # Streamlit investigator web application
 ├── checkpoints/                      # Trained model checkpoints
 │   ├── ransomware_binary.pkl
 │   ├── ransomware_family.pkl
@@ -200,4 +209,3 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 ## 📜 License
 
 MIT License. See [LICENSE](LICENSE) for details.
-
