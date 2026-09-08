@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-GNN-ee4c2c.svg)](https://pytorch.org/)
 [![XGBoost](https://img.shields.io/badge/XGBoost-Tabular-green.svg)](https://xgboost.readthedocs.io/)
-[![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Non--Commercial-red.svg)](LICENSE)
 
 **ChainGuard** is an enterprise-grade multi-chain cryptocurrency threat detection, fund-flow tracing, and forensic evidence fusion platform. It addresses the fundamental pseudonymity challenge of public blockchains (Bitcoin, Ethereum, Litecoin) by combining tabular machine learning, graph deep learning, unsupervised anomaly detection, and heuristic fund-flow pattern analysis.
 
@@ -208,4 +208,8 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ## 📜 License
 
-MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the **Non-Commercial Personal & Educational Use License**.
+Permission is granted strictly for **personal, educational, testing, research, and demonstration purposes only**. Commercial use, commercial distribution, paid services, or integration into commercial products is strictly prohibited without prior written consent from the author.
+
+See [LICENSE](LICENSE) for full details.
+
