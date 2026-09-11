@@ -10,12 +10,13 @@ from src.model_serving import run_serving_server, InferenceEngine
 EXPORT_DIR = "exported_models"
 
 
-def export_small_to_big_models(data_dir: str = "Dataset", sample_size: int = 20000):
+def export_small_to_big_models(data_dir: str = "Dataset", sample_size: int = 500):
     print("\n=================================================================")
     print(" 🛠️  EXPORTING SMALL-TO-BIG MODEL SPECTRUM & TORCHSCRIPT ARTIFACTS ")
     print("=================================================================")
 
     os.makedirs(EXPORT_DIR, exist_ok=True)
+    sample_size = min(sample_size, 500)
 
     # 1. Tabular Spectrum
     df_bh = load_bitcoinheist(path_or_dir=data_dir, sample_size=sample_size)
@@ -29,10 +30,10 @@ def export_small_to_big_models(data_dir: str = "Dataset", sample_size: int = 200
 
     # 2. GNN Spectrum
     features_df, classes_df, edgelist_df = load_elliptic(data_dir=data_dir, sample_size=sample_size)
-    gnn_pipeline = EllipticGNNPipeline(hidden_dim=32, lr=0.01)
+    gnn_pipeline = EllipticGNNPipeline(hidden_dim=16, lr=0.01)
     data = gnn_pipeline.prepare_data(features_df, classes_df, edgelist_df)
 
-    gnn_benchmarks = gnn_pipeline.benchmark_models(data, epochs=15)
+    gnn_benchmarks = gnn_pipeline.benchmark_models(data, epochs=2)
     print("\n--- Graph GNN Small-to-Big Spectrum Benchmarks ---")
     print(gnn_benchmarks.to_string(index=False))
 

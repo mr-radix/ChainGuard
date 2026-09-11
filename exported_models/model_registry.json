@@ -1,0 +1,130 @@
+{
+  "tabular_benchmarks": [
+    {
+      "Model": "RandomForest",
+      "Model Tier": "Medium",
+      "Precision": 0.7,
+      "Recall": 1.0,
+      "F1 Score": 0.8235294117647058,
+      "PR-AUC": 0.9910714285714284,
+      "ROC-AUC": 0.9998551144595769,
+      "Latency (ms/sample)": 0.0243,
+      "Train Time (s)": 0.121
+    },
+    {
+      "Model": "XGBoost",
+      "Model Tier": "Large",
+      "Precision": 0.875,
+      "Recall": 1.0,
+      "F1 Score": 0.9333333333333333,
+      "PR-AUC": 0.9910714285714284,
+      "ROC-AUC": 0.9998551144595771,
+      "Latency (ms/sample)": 0.0017,
+      "Train Time (s)": 2.128
+    },
+    {
+      "Model": "Deep MLP NeuralNet",
+      "Model Tier": "Deep",
+      "Precision": 1.0,
+      "Recall": 0.7142857142857143,
+      "F1 Score": 0.8333333333333334,
+      "PR-AUC": 0.9706632653061225,
+      "ROC-AUC": 0.9995653433787308,
+      "Latency (ms/sample)": 0.0019,
+      "Train Time (s)": 0.445
+    },
+    {
+      "Model": "DecisionTree",
+      "Model Tier": "Small",
+      "Precision": 0.1,
+      "Recall": 1.0,
+      "F1 Score": 0.18181818181818182,
+      "PR-AUC": 0.55,
+      "ROC-AUC": 0.9361054766734279,
+      "Latency (ms/sample)": 0.0003,
+      "Train Time (s)": 0.002
+    },
+    {
+      "Model": "LogisticRegression",
+      "Model Tier": "Small",
+      "Precision": 0.041379310344827586,
+      "Recall": 0.8571428571428571,
+      "F1 Score": 0.07894736842105263,
+      "PR-AUC": 0.06207161263249879,
+      "ROC-AUC": 0.8517820921472037,
+      "Latency (ms/sample)": 0.0005,
+      "Train Time (s)": 0.007
+    }
+  ],
+  "gnn_benchmarks": [
+    {
+      "Model": "MLP Baseline",
+      "Model Tier": "Small",
+      "Precision": 0.21428571428571427,
+      "Recall": 1.0,
+      "F1 Score": 0.35294117647058826,
+      "PR-AUC": 0.20252525252525252,
+      "ROC-AUC": 0.7866666666666666,
+      "Latency (ms/sample)": 0.0148,
+      "Train Time (s)": 0.216
+    },
+    {
+      "Model": "GCN",
+      "Model Tier": "Medium",
+      "Precision": 0.2,
+      "Recall": 1.0,
+      "F1 Score": 0.3333333333333333,
+      "PR-AUC": 0.1923076923076923,
+      "ROC-AUC": 0.76,
+      "Latency (ms/sample)": 0.0132,
+      "Train Time (s)": 0.003
+    },
+    {
+      "Model": "Deep ResGraphSAGE",
+      "Model Tier": "Deep",
+      "Precision": 0.1875,
+      "Recall": 1.0,
+      "F1 Score": 0.3157894736842105,
+      "PR-AUC": 0.19576719576719576,
+      "ROC-AUC": 0.7866666666666666,
+      "Latency (ms/sample)": 0.0141,
+      "Train Time (s)": 0.008
+    },
+    {
+      "Model": "GraphSAGE",
+      "Model Tier": "Large",
+      "Precision": 0.18181818181818182,
+      "Recall": 0.6666666666666666,
+      "F1 Score": 0.2857142857142857,
+      "PR-AUC": 0.2002450980392157,
+      "ROC-AUC": 0.7333333333333333,
+      "Latency (ms/sample)": 0.01,
+      "Train Time (s)": 0.003
+    }
+  ],
+  "export_paths": {
+    "tabular": {
+      "DecisionTree": {
+        "file_path": "exported_models/decisiontree.joblib",
+        "file_size_kb": 3.04
+      },
+      "LogisticRegression": {
+        "file_path": "exported_models/logisticregression.joblib",
+        "file_size_kb": 1.9
+      },
+      "RandomForest": {
+        "file_path": "exported_models/randomforest.joblib",
+        "file_size_kb": 275.35
+      },
+      "XGBoost": {
+        "file_path": "exported_models/xgboost.joblib",
+        "file_size_kb": 118.95
+      },
+      "Deep MLP NeuralNet": {
+        "file_path": "exported_models/deep_mlp_neuralnet.joblib",
+        "file_size_kb": 401.6
+      }
+    },
+    "torchscript_gnn": "exported_models/elliptic_graphsage.ptc"
+  }
+}
