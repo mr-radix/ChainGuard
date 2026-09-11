@@ -1,0 +1,31 @@
+services:
+
+  # Model Server & ML REST API Service
+  model:
+    build:
+      context: ./model
+      dockerfile: Dockerfile
+    container_name: chainguard-model-server
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - PYTHONUNBUFFERED=1
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Web Dashboard & UI Interface Service
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile
+    container_name: chainguard-web-dashboard
+    ports:
+      - "3000:3000"
+    depends_on:
+      - model
+    restart: always

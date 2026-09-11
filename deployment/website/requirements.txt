@@ -1,0 +1,4 @@
+# ChainGuard Web Dashboard Host Requirements (Pinned Versions)
+httpie==3.2.4
+urllib3==2.7.0
+pytest==9.1.1

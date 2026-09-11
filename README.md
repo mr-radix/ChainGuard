@@ -68,23 +68,6 @@
 
 ---
 
-## 📘 10-Part Master Technical Notes & Deep-Dive Guide
-
-For the full architectural specification, technical equations, mathematical formulations, and detailed Q&A, refer to **[notes.md](notes.md)**:
-
-- **[Part 1: Executive Overview & System Architecture](notes.md#part-1-executive-overview--system-architecture)**
-- **[Part 2: The Cryptocurrency Threat Landscape & Domain Challenges](notes.md#part-2-the-cryptocurrency-threat-landscape--domain-challenges)**
-- **[Part 3: Multi-Chain Ingestion & Data Normalization Engine](notes.md#part-3-multi-chain-ingestion--data-normalization-engine)**
-- **[Part 4: Feature Engineering & Behavioral Address Profiling](notes.md#part-4-feature-engineering--behavioral-address-profiling)**
-- **[Part 5: Dual-Head Tabular Ransomware Classifier & Model Spectrum](notes.md#part-5-dual-head-tabular-ransomware-classifier--model-spectrum)**
-- **[Part 6: Temporal Graph Neural Network for Illicit Node Detection](notes.md#part-6-temporal-graph-neural-network-for-illicit-node-detection)**
-- **[Part 7: Graph Intelligence & Fund-Flow Traversal Engines](notes.md#part-7-graph-intelligence--fund-flow-traversal-engines)**
-- **[Part 8: Unsupervised Anomaly Intelligence & Behavioral Drift](notes.md#part-8-unsupervised-anomaly-intelligence--behavioral-drift)**
-- **[Part 9: Composite Risk Scoring & Evidence Fusion Engine](notes.md#part-9-composite-risk-scoring--evidence-fusion-engine)**
-- **[Part 10: Production Serving & REST API Engine](notes.md#part-10-production-serving-rest-api--investigator-web-dashboard)**
-
----
-
 ## 🚀 Quickstart Guide
 
 ### 1. Installation

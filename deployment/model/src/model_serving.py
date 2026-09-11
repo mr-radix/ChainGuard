@@ -12,7 +12,9 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from src.features import bitcoinheist_features
 from src.risk_scoring import RiskAssessment
 
-DEFAULT_EXPORT_DIR = "exported_models"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_EXPORT_DIR = os.path.join(BASE_DIR, "exported_models") if os.path.exists(os.path.join(BASE_DIR, "exported_models")) else "exported_models"
+
 
 
 class ModelRegistry:
