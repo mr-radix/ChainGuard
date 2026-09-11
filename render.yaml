@@ -23,8 +23,9 @@ services:
   # ----------------------------------------------------------------------------
   # 2. ChainGuard Web Dashboard (Static Site / Frontend UI)
   # ----------------------------------------------------------------------------
-  - type: static
+  - type: web
     name: chainguard-web-dashboard
+    env: static
     buildCommand: echo "Building ChainGuard Static Web Assets..."
     staticPublishPath: ./deployment/website/src
     routes:
