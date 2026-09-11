@@ -33,8 +33,6 @@ Dataset/
 # Allow pre-trained models in exported_models
 !exported_models/
 !exported_models/**
-!deployment/model/exported_models/
-!deployment/model/exported_models/**
 
 # Jupyter Notebook
 .ipynb_checkpoints

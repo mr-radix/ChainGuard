@@ -9,7 +9,7 @@ services:
   - type: web
     name: chainguard-model-server
     env: docker
-    dockerContext: ./deployment/model
+    dockerContext: .
     dockerfilePath: ./deployment/model/Dockerfile
     plan: starter # Starter plan recommended for ML/PyTorch memory footprint (512MB - 1GB RAM)
     region: oregon

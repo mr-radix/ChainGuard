@@ -8,8 +8,8 @@
       "F1 Score": 0.8235294117647058,
       "PR-AUC": 0.9910714285714284,
       "ROC-AUC": 0.9998551144595769,
-      "Latency (ms/sample)": 0.0243,
-      "Train Time (s)": 0.121
+      "Latency (ms/sample)": 0.0246,
+      "Train Time (s)": 0.118
     },
     {
       "Model": "XGBoost",
@@ -19,8 +19,8 @@
       "F1 Score": 0.9333333333333333,
       "PR-AUC": 0.9910714285714284,
       "ROC-AUC": 0.9998551144595771,
-      "Latency (ms/sample)": 0.0017,
-      "Train Time (s)": 2.128
+      "Latency (ms/sample)": 0.0016,
+      "Train Time (s)": 2.095
     },
     {
       "Model": "Deep MLP NeuralNet",
@@ -30,8 +30,8 @@
       "F1 Score": 0.8333333333333334,
       "PR-AUC": 0.9706632653061225,
       "ROC-AUC": 0.9995653433787308,
-      "Latency (ms/sample)": 0.0019,
-      "Train Time (s)": 0.445
+      "Latency (ms/sample)": 0.0018,
+      "Train Time (s)": 0.482
     },
     {
       "Model": "DecisionTree",
@@ -41,7 +41,7 @@
       "F1 Score": 0.18181818181818182,
       "PR-AUC": 0.55,
       "ROC-AUC": 0.9361054766734279,
-      "Latency (ms/sample)": 0.0003,
+      "Latency (ms/sample)": 0.0002,
       "Train Time (s)": 0.002
     },
     {
@@ -52,54 +52,54 @@
       "F1 Score": 0.07894736842105263,
       "PR-AUC": 0.06207161263249879,
       "ROC-AUC": 0.8517820921472037,
-      "Latency (ms/sample)": 0.0005,
+      "Latency (ms/sample)": 0.0006,
       "Train Time (s)": 0.007
     }
   ],
   "gnn_benchmarks": [
     {
-      "Model": "MLP Baseline",
-      "Model Tier": "Small",
-      "Precision": 0.21428571428571427,
-      "Recall": 1.0,
-      "F1 Score": 0.35294117647058826,
-      "PR-AUC": 0.20252525252525252,
-      "ROC-AUC": 0.7866666666666666,
-      "Latency (ms/sample)": 0.0148,
-      "Train Time (s)": 0.216
-    },
-    {
-      "Model": "GCN",
-      "Model Tier": "Medium",
+      "Model": "Deep ResGraphSAGE",
+      "Model Tier": "Deep",
       "Precision": 0.2,
       "Recall": 1.0,
       "F1 Score": 0.3333333333333333,
-      "PR-AUC": 0.1923076923076923,
-      "ROC-AUC": 0.76,
-      "Latency (ms/sample)": 0.0132,
-      "Train Time (s)": 0.003
-    },
-    {
-      "Model": "Deep ResGraphSAGE",
-      "Model Tier": "Deep",
-      "Precision": 0.1875,
-      "Recall": 1.0,
-      "F1 Score": 0.3157894736842105,
-      "PR-AUC": 0.19576719576719576,
-      "ROC-AUC": 0.7866666666666666,
-      "Latency (ms/sample)": 0.0141,
-      "Train Time (s)": 0.008
+      "PR-AUC": 0.7638888888888888,
+      "ROC-AUC": 0.9733333333333333,
+      "Latency (ms/sample)": 0.012,
+      "Train Time (s)": 0.007
     },
     {
       "Model": "GraphSAGE",
       "Model Tier": "Large",
-      "Precision": 0.18181818181818182,
+      "Precision": 0.15384615384615385,
       "Recall": 0.6666666666666666,
-      "F1 Score": 0.2857142857142857,
-      "PR-AUC": 0.2002450980392157,
-      "ROC-AUC": 0.7333333333333333,
-      "Latency (ms/sample)": 0.01,
-      "Train Time (s)": 0.003
+      "F1 Score": 0.25,
+      "PR-AUC": 0.1885893246187364,
+      "ROC-AUC": 0.6933333333333334,
+      "Latency (ms/sample)": 0.0085,
+      "Train Time (s)": 0.002
+    },
+    {
+      "Model": "GCN",
+      "Model Tier": "Medium",
+      "Precision": 0.13043478260869565,
+      "Recall": 1.0,
+      "F1 Score": 0.23076923076923078,
+      "PR-AUC": 0.14208089668615984,
+      "ROC-AUC": 0.64,
+      "Latency (ms/sample)": 0.0088,
+      "Train Time (s)": 0.002
+    },
+    {
+      "Model": "MLP Baseline",
+      "Model Tier": "Small",
+      "Precision": 0.0,
+      "Recall": 0.0,
+      "F1 Score": 0.0,
+      "PR-AUC": 0.09374884374884374,
+      "ROC-AUC": 0.48,
+      "Latency (ms/sample)": 0.012,
+      "Train Time (s)": 0.213
     }
   ],
   "export_paths": {
