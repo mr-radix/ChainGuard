@@ -59,6 +59,47 @@ async function checkApiHealth() {
   }
 }
 
+// Cryptocurrency Address Format Validator
+function isValidCryptoAddress(address, blockchain) {
+  if (!address || typeof address !== 'string') return false;
+  const addr = address.trim();
+  if (addr.length < 24 || addr.length > 105 || addr.includes(' ')) return false;
+
+  const chain = (blockchain || 'BTC').toUpperCase();
+  if (chain === 'BTC') {
+    return /^(1|3)[a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-zA-Z0-9]{8,87}$/.test(addr);
+  } else if (chain === 'ETH' || chain === 'USDT') {
+    return /^0x[a-fA-F0-9]{40}$|^T[a-zA-Z0-9]{33}$/.test(addr);
+  } else if (chain === 'SOL') {
+    return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr);
+  } else if (chain === 'LTC') {
+    return /^(L|M)[a-km-zA-HJ-NP-Z1-9]{26,34}$|^ltc1[a-zA-Z0-9]{8,87}$/.test(addr);
+  } else if (chain === 'XMR') {
+    return /^[48][0-9a-zA-Z]{94}$/.test(addr);
+  } else if (chain === 'XRP') {
+    return /^r[0-9a-zA-Z]{24,34}$/.test(addr);
+  }
+  return /^[a-zA-Z0-9]{25,95}$/.test(addr);
+}
+
+function showValidationError(message) {
+  const badgeContainer = document.getElementById('riskBadgeContainer');
+  if (badgeContainer) {
+    badgeContainer.innerHTML = `<span class="risk-badge" style="background: rgba(255, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red);">INVALID ADDRESS</span>`;
+  }
+  document.getElementById('probabilityVal').textContent = '0.00%';
+  const probBar = document.getElementById('probabilityBar');
+  if (probBar) {
+    probBar.style.width = '0%';
+    probBar.style.background = 'var(--accent-red)';
+  }
+  document.getElementById('familyVal').textContent = 'Validation Error: Invalid Input';
+  document.getElementById('familyVal').style.color = 'var(--accent-red)';
+  document.getElementById('familyConfidence').textContent = 'No Threat Calculations Executed';
+  document.getElementById('riskScoreVal').textContent = '0.00';
+  document.getElementById('evidenceList').innerText = `• ERROR: ${message}\n• Action Required: Please enter a valid cryptocurrency wallet address format for the selected blockchain.`;
+}
+
 // Preset Sample Loader
 function loadSampleAddress() {
   document.getElementById('addressInput').value = '13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94';
@@ -66,6 +107,7 @@ function loadSampleAddress() {
   document.getElementById('loopInput').value = '4';
   document.getElementById('countInput').value = '42';
   document.getElementById('chainSelect').value = 'BTC';
+  document.getElementById('modelSelect').value = 'xgboost';
   
   // Submit scan automatically
   handleScanSubmit(new Event('submit'));
@@ -75,12 +117,17 @@ function loadSampleAddress() {
 async function handleScanSubmit(event) {
   if (event) event.preventDefault();
 
-  const address = document.getElementById('addressInput').value || '13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94';
+  const address = (document.getElementById('addressInput').value || '').trim();
   const blockchain = document.getElementById('chainSelect').value || 'BTC';
   const targetModel = document.getElementById('modelSelect').value || 'xgboost';
   const income = parseFloat(document.getElementById('incomeInput').value) || 100000000;
   const loop = parseInt(document.getElementById('loopInput').value) || 0;
   const count = parseInt(document.getElementById('countInput').value) || 5;
+
+  if (!isValidCryptoAddress(address, blockchain)) {
+    showValidationError(`"${address || 'Input'}" is not a valid ${blockchain} wallet address format.`);
+    return;
+  }
 
   const payload = {
     address: address,
@@ -103,42 +150,52 @@ async function handleScanSubmit(event) {
 
     if (response.ok) {
       const result = await response.json();
-      updateScanUI(result);
+      if (result.status === 'error') {
+        showValidationError(result.message);
+      } else {
+        updateScanUI(result);
+      }
     } else {
+      const errData = await response.json().catch(() => ({}));
+      if (response.status === 400 && errData.message) {
+        showValidationError(errData.message);
+        return;
+      }
       throw new Error('Fallback to local evaluation engine');
     }
   } catch (err) {
     // Offline simulation mode for instant client-side testing
     const simulated = simulateThreatAssessment(payload);
-    updateScanUI(simulated);
+    if (simulated.status === 'error') {
+      showValidationError(simulated.message);
+    } else {
+      updateScanUI(simulated);
+    }
   }
 }
 
 // Simulated Engine for Client-Side Demo
 function simulateThreatAssessment(payload) {
   const addressStr = (payload.address || '').trim();
-  const isSample = addressStr.includes('13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94') || payload.loop > 2 || payload.income > 1e9;
-  
-  let addrSeed = 0.15;
-  if (addressStr.length > 0) {
-    let hash = 0;
-    for (let i = 0; i < addressStr.length; i++) {
-      hash = ((hash << 5) - hash) + addressStr.charCodeAt(i);
-      hash |= 0;
-    }
-    addrSeed = (Math.abs(hash) % 1000) / 1000.0;
+  if (!isValidCryptoAddress(addressStr, payload.blockchain)) {
+    return {
+      status: 'error',
+      message: `Invalid cryptocurrency wallet address format for ${payload.blockchain}.`
+    };
   }
+
+  const isKnownRansomware = ['13AM4', '111K8', '12t9Y', '132F2', '14E15'].some(sub => addressStr.includes(sub));
 
   const incomeFactor = Math.min(1.0, payload.income / 2e9);
   const loopFactor = Math.min(1.0, payload.loop / 10.0);
   const countFactor = Math.min(1.0, payload.count / 100.0);
 
-  let prob = Math.min(0.99, Math.max(0.025, (loopFactor * 0.35) + (incomeFactor * 0.2) + (countFactor * 0.15) + (addrSeed * 0.25)));
-  if (isSample) prob = Math.max(prob, 0.948);
+  let prob = Math.min(0.99, Math.max(0.025, (loopFactor * 0.35) + (incomeFactor * 0.2) + (countFactor * 0.15)));
+  if (isKnownRansomware) prob = Math.max(prob, 0.948);
 
   const isRansomware = prob >= 0.5;
   let modelName = 'XGBoost Dual-Head Classifier';
-  let family = isRansomware ? 'Locky Ransomware' : 'White Address';
+  let family = isKnownRansomware ? 'Locky Ransomware' : (isRansomware ? 'Suspicious High-Risk Obfuscation Cluster' : 'Licit Wallet Address');
 
   if (payload.target_model === 'isolation_forest') {
     modelName = 'Isolation Forest Anomaly Engine';
@@ -168,7 +225,7 @@ function simulateThreatAssessment(payload) {
   if (isRansomware) {
     evidence.push(`Forensic Match: Signature associated with ${family}`);
   } else {
-    evidence.push('Clean Status: No ransomware signatures or anomalous graph drifts identified');
+    evidence.push('Clean Status: No threat signatures or anomalous graph drifts identified');
   }
 
   return {

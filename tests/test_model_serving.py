@@ -5,7 +5,20 @@ import urllib.request
 import threading
 import time
 from serve_models import export_small_to_big_models
-from src.model_serving import ModelRegistry, InferenceEngine, run_serving_server
+from src.model_serving import ModelRegistry, InferenceEngine, run_serving_server, validate_crypto_address
+
+
+def test_validate_crypto_address():
+    # Valid addresses
+    assert validate_crypto_address("111K8kZAEnJg245r2cM6y9zgJGHZtJPy6", "BTC") is True
+    assert validate_crypto_address("13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94", "BTC") is True
+    assert validate_crypto_address("0x71C7656EC7ab88b098defB751B7401B5f6d8976F", "ETH") is True
+    
+    # Invalid non-wallet strings
+    assert validate_crypto_address("john", "BTC") is False
+    assert validate_crypto_address("hello world", "BTC") is False
+    assert validate_crypto_address("123456", "BTC") is False
+    assert validate_crypto_address("not_an_address", "ETH") is False
 
 
 def test_export_and_registry():
@@ -67,7 +80,7 @@ def test_serving_rest_api():
         data = json.loads(req.read().decode("utf-8"))
         assert data["status"] == "healthy"
 
-        # POST /predict/ransomware
+        # POST /predict/ransomware with valid address
         payload = json.dumps({
             "address": "111K8kZAEnJg245r2cM6y9zgJGHZtJPy6",
             "income": 500000.0,
@@ -84,5 +97,26 @@ def test_serving_rest_api():
         assert resp.status == 200
         result = json.loads(resp.read().decode("utf-8"))
         assert "ransomware_risk_score" in result
+
+        # POST /predict/risk with invalid non-wallet text (should return 400 HTTP error)
+        invalid_payload = json.dumps({
+            "address": "john",
+            "blockchain": "BTC"
+        }).encode("utf-8")
+
+        invalid_req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/predict/risk",
+            data=invalid_payload,
+            headers={"Content-Type": "application/json"}
+        )
+        try:
+            urllib.request.urlopen(invalid_req)
+            assert False, "Should have raised HTTPError 400"
+        except urllib.error.HTTPError as err:
+            assert err.code == 400
+            err_data = json.loads(err.read().decode("utf-8"))
+            assert err_data["status"] == "error"
+
     finally:
         server.shutdown()
+

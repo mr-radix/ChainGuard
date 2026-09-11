@@ -8,8 +8,8 @@
       "F1 Score": 0.8235294117647058,
       "PR-AUC": 0.9910714285714284,
       "ROC-AUC": 0.9998551144595769,
-      "Latency (ms/sample)": 0.0937,
-      "Train Time (s)": 0.299
+      "Latency (ms/sample)": 0.0541,
+      "Train Time (s)": 0.221
     },
     {
       "Model": "XGBoost",
@@ -19,8 +19,8 @@
       "F1 Score": 0.9333333333333333,
       "PR-AUC": 0.9910714285714284,
       "ROC-AUC": 0.9998551144595771,
-      "Latency (ms/sample)": 0.0099,
-      "Train Time (s)": 2.505
+      "Latency (ms/sample)": 0.0101,
+      "Train Time (s)": 0.368
     },
     {
       "Model": "Deep MLP NeuralNet",
@@ -30,8 +30,8 @@
       "F1 Score": 0.8333333333333334,
       "PR-AUC": 0.9706632653061225,
       "ROC-AUC": 0.9995653433787308,
-      "Latency (ms/sample)": 0.0075,
-      "Train Time (s)": 1.281
+      "Latency (ms/sample)": 0.0099,
+      "Train Time (s)": 0.899
     },
     {
       "Model": "DecisionTree",
@@ -42,7 +42,7 @@
       "PR-AUC": 0.55,
       "ROC-AUC": 0.9361054766734279,
       "Latency (ms/sample)": 0.0003,
-      "Train Time (s)": 0.002
+      "Train Time (s)": 0.003
     },
     {
       "Model": "LogisticRegression",
@@ -52,7 +52,7 @@
       "F1 Score": 0.07894736842105263,
       "PR-AUC": 0.06207161263249879,
       "ROC-AUC": 0.8517820921472037,
-      "Latency (ms/sample)": 0.0005,
+      "Latency (ms/sample)": 0.0008,
       "Train Time (s)": 0.01
     }
   ],
@@ -60,13 +60,13 @@
     {
       "Model": "Deep ResGraphSAGE",
       "Model Tier": "Deep",
-      "Precision": 0.23076923076923078,
+      "Precision": 0.1875,
       "Recall": 1.0,
-      "F1 Score": 0.375,
-      "PR-AUC": 0.2787037037037037,
-      "ROC-AUC": 0.8533333333333333,
-      "Latency (ms/sample)": 0.0395,
-      "Train Time (s)": 0.01
+      "F1 Score": 0.3157894736842105,
+      "PR-AUC": 0.732905982905983,
+      "ROC-AUC": 0.8666666666666667,
+      "Latency (ms/sample)": 0.0227,
+      "Train Time (s)": 0.011
     },
     {
       "Model": "GCN",
@@ -74,10 +74,10 @@
       "Precision": 0.13043478260869565,
       "Recall": 1.0,
       "F1 Score": 0.23076923076923078,
-      "PR-AUC": 0.22817460317460317,
-      "ROC-AUC": 0.8266666666666667,
-      "Latency (ms/sample)": 0.0146,
-      "Train Time (s)": 0.004
+      "PR-AUC": 0.1837752525252525,
+      "ROC-AUC": 0.6933333333333334,
+      "Latency (ms/sample)": 0.0124,
+      "Train Time (s)": 0.005
     },
     {
       "Model": "MLP Baseline",
@@ -85,10 +85,10 @@
       "Precision": 0.0,
       "Recall": 0.0,
       "F1 Score": 0.0,
-      "PR-AUC": 0.20806878306878304,
-      "ROC-AUC": 0.8,
-      "Latency (ms/sample)": 0.0308,
-      "Train Time (s)": 0.264
+      "PR-AUC": 0.5517857142857143,
+      "ROC-AUC": 0.8933333333333334,
+      "Latency (ms/sample)": 0.0218,
+      "Train Time (s)": 0.288
     },
     {
       "Model": "GraphSAGE",
@@ -96,35 +96,35 @@
       "Precision": 0.0,
       "Recall": 0.0,
       "F1 Score": 0.0,
-      "PR-AUC": 0.24468954248366012,
-      "ROC-AUC": 0.76,
-      "Latency (ms/sample)": 0.0122,
-      "Train Time (s)": 0.005
+      "PR-AUC": 0.1875180375180375,
+      "ROC-AUC": 0.7733333333333332,
+      "Latency (ms/sample)": 0.0272,
+      "Train Time (s)": 0.004
     }
   ],
   "export_paths": {
     "tabular": {
       "DecisionTree": {
-        "file_path": "exported_models/decisiontree.joblib",
+        "file_path": "/home/mrradix/Projects/ChainGuard/deployment/model/exported_models/decisiontree.joblib",
         "file_size_kb": 3.04
       },
       "LogisticRegression": {
-        "file_path": "exported_models/logisticregression.joblib",
+        "file_path": "/home/mrradix/Projects/ChainGuard/deployment/model/exported_models/logisticregression.joblib",
         "file_size_kb": 1.9
       },
       "RandomForest": {
-        "file_path": "exported_models/randomforest.joblib",
+        "file_path": "/home/mrradix/Projects/ChainGuard/deployment/model/exported_models/randomforest.joblib",
         "file_size_kb": 275.35
       },
       "XGBoost": {
-        "file_path": "exported_models/xgboost.joblib",
+        "file_path": "/home/mrradix/Projects/ChainGuard/deployment/model/exported_models/xgboost.joblib",
         "file_size_kb": 118.95
       },
       "Deep MLP NeuralNet": {
-        "file_path": "exported_models/deep_mlp_neuralnet.joblib",
+        "file_path": "/home/mrradix/Projects/ChainGuard/deployment/model/exported_models/deep_mlp_neuralnet.joblib",
         "file_size_kb": 401.6
       }
     },
-    "torchscript_gnn": "exported_models/elliptic_graphsage.ptc"
+    "torchscript_gnn": "/home/mrradix/Projects/ChainGuard/deployment/model/exported_models/elliptic_graphsage.ptc"
   }
 }

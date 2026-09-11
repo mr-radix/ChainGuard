@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import joblib
 import time
@@ -12,9 +13,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from src.features import bitcoinheist_features
 from src.risk_scoring import RiskAssessment
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_EXPORT_DIR = os.path.join(BASE_DIR, "exported_models") if os.path.exists(os.path.join(BASE_DIR, "exported_models")) else "exported_models"
-
+DEFAULT_EXPORT_DIR = "exported_models"
 
 
 class ModelRegistry:
@@ -155,6 +154,48 @@ class InferenceEngine:
         )
 
 
+def validate_crypto_address(address: str, blockchain: str = "BTC") -> bool:
+    """
+    Strictly validates whether the input string conforms to valid cryptocurrency address specifications.
+    Returns False for non-wallet strings (such as names, arbitrary words, or malformed hashes).
+    """
+    if not address or not isinstance(address, str):
+        return False
+
+    addr = address.strip()
+    if len(addr) < 24 or len(addr) > 105 or " " in addr:
+        return False
+
+    chain = (blockchain or "BTC").upper()
+
+    if chain == "BTC":
+        # Bitcoin: Base58 (starts 1 or 3, len 26-35) or Bech32 (starts bc1, len 26-90)
+        btc_pattern = r'^(1|3)[a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-zA-Z0-9]{8,87}$'
+        return bool(re.match(btc_pattern, addr))
+    elif chain in ["ETH", "USDT"]:
+        # Ethereum / USDT ERC20: 0x + 40 hex chars OR TRC20: T + 33 chars
+        eth_pattern = r'^0x[a-fA-F0-9]{40}$|^T[a-zA-Z0-9]{33}$'
+        return bool(re.match(eth_pattern, addr))
+    elif chain == "SOL":
+        # Solana: 32 to 44 base58 chars
+        sol_pattern = r'^[1-9A-HJ-NP-Za-km-z]{32,44}$'
+        return bool(re.match(sol_pattern, addr))
+    elif chain == "LTC":
+        # Litecoin: L, M, or ltc1
+        ltc_pattern = r'^(L|M)[a-km-zA-HJ-NP-Z1-9]{26,34}$|^ltc1[a-zA-Z0-9]{8,87}$'
+        return bool(re.match(ltc_pattern, addr))
+    elif chain == "XMR":
+        # Monero: starts with 4 or 8, length 95
+        xmr_pattern = r'^[48][0-9a-zA-Z]{94}$'
+        return bool(re.match(xmr_pattern, addr))
+    elif chain == "XRP":
+        # Ripple: starts with r, length 25-35
+        xrp_pattern = r'^r[0-9a-zA-Z]{24,34}$'
+        return bool(re.match(xrp_pattern, addr))
+    else:
+        return bool(re.match(r'^[a-zA-Z0-9]{25,95}$', addr))
+
+
 class ServingAPIHandler(BaseHTTPRequestHandler):
     """
     Lightweight REST API HTTP Handler for hosting exported ChainGuard models.
@@ -202,6 +243,15 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
             payload = {}
 
         if self.path == "/predict/ransomware":
+            address_str = str(payload.get("address", "")).strip()
+            blockchain = payload.get("blockchain", "BTC")
+            if not validate_crypto_address(address_str, blockchain):
+                self._send_response_json({
+                    "status": "error",
+                    "message": f"Invalid cryptocurrency wallet address format for {blockchain}. Please enter a valid address."
+                }, status=400)
+                return
+
             res = ServingAPIHandler.engine.predict_ransomware(
                 address_data=payload,
                 model_tier=payload.get("model_tier", "large")
@@ -210,48 +260,54 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
         elif self.path == "/predict/risk":
             blockchain = payload.get("blockchain", "BTC")
             target_model = payload.get("target_model", "xgboost")
-            
+            address_str = str(payload.get("address", "")).strip()
+
+            # Perform strict cryptocurrency address format validation
+            if not validate_crypto_address(address_str, blockchain):
+                self._send_response_json({
+                    "status": "error",
+                    "message": f"Invalid cryptocurrency wallet address format for {blockchain}. Please enter a valid wallet address."
+                }, status=400)
+                return
+
             # Predict tabular ransomware score
             ransomware_res = ServingAPIHandler.engine.predict_ransomware(payload, model_tier="large")
             base_score = float(ransomware_res.get("ransomware_risk_score", 0.05))
-            
+
             income = float(payload.get("income", 0.0))
             loop = int(payload.get("loop", 0))
             count = int(payload.get("count", 0))
-            address_str = str(payload.get("address", "")).strip()
-            
+
             is_known_ransomware = any(addr in address_str for addr in ["13AM4", "111K8", "12t9Y", "132F2", "14E15"])
-            
-            # Derive deterministic per-address risk entropy via SHA-256
-            addr_hash = hashlib.sha256(address_str.encode("utf-8")).hexdigest() if address_str else "00000000"
-            addr_seed = (int(addr_hash[:8], 16) % 1000) / 1000.0  # 0.000 to 0.999
-            
+
             income_factor = min(1.0, income / 2e9)
             loop_factor = min(1.0, loop / 10.0)
             count_factor = min(1.0, count / 100.0)
-            
-            # Calculate dynamic risk score across model base score, inputs, and address seed
-            raw_risk = (base_score * 0.25) + (loop_factor * 0.35) + (income_factor * 0.15) + (count_factor * 0.1) + (addr_seed * 0.25)
+
+            # Calculate dynamic risk score cleanly from model predictions and transactional feature inputs
+            raw_risk = (base_score * 0.4) + (loop_factor * 0.35) + (income_factor * 0.15) + (count_factor * 0.1)
             computed_risk = min(0.99, max(0.015, raw_risk))
             if is_known_ransomware:
                 computed_risk = max(computed_risk, 0.948)
-                
+
             is_r = bool(computed_risk >= 0.5)
-            
+
             # Chain-aware family threat taxonomy
-            if is_r:
+            if is_known_ransomware:
+                eval_family = "Locky Ransomware"
+            elif is_r:
                 if blockchain == "USDT":
-                    eval_family = "USDT Blacklisted Mixer / High-Yield Scam"
+                    eval_family = "USDT High-Velocity Obfuscation Activity"
                 elif blockchain == "ETH":
-                    eval_family = "Ethereum Malicious Contract / Phishing Fraud"
+                    eval_family = "Ethereum High-Risk Anomaly Flow"
                 elif blockchain == "SOL":
-                    eval_family = "Solana Wallet Drainer Program"
+                    eval_family = "Solana High-Velocity Drainer Pattern"
                 elif blockchain == "XMR":
-                    eval_family = "Monero Ring Signature Obfuscation Outlier"
+                    eval_family = "Monero Obfuscation Outlier"
                 elif blockchain == "XRP":
-                    eval_family = "Ripple Payment Channel Escrow Exploit"
+                    eval_family = "Ripple Escrow Anomaly"
                 else:
-                    eval_family = "Locky Ransomware Sink"
+                    eval_family = "Suspicious High-Risk Obfuscation Cluster"
             else:
                 if blockchain == "USDT":
                     eval_family = "Verified USDT Token Holder"
@@ -264,7 +320,7 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
                 elif blockchain == "XRP":
                     eval_family = "Verified XRP Destination Account"
                 else:
-                    eval_family = "White Address"
+                    eval_family = "Licit Wallet Address"
 
             if target_model == "isolation_forest":
                 model_name = "Isolation Forest Anomaly Engine"
@@ -272,9 +328,9 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
                 model_name = "PyTorch GraphSAGE GNN"
             else:
                 model_name = "XGBoost Dual-Head Classifier"
-                
+
             eval_payload = {
-                "entity_id": payload.get("address", "unknown_address"),
+                "entity_id": address_str,
                 "ransomware_score": round(computed_risk, 4),
                 "ransomware_family": eval_family,
                 "gnn_score": round(computed_risk * 0.92, 4) if is_r else 0.02,
@@ -283,7 +339,7 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
                 "fan_out_detected": bool(count > 30)
             }
             res = ServingAPIHandler.engine.predict_risk(eval_payload)
-            
+
             res["blockchain_target"] = blockchain
             res["target_model_used"] = model_name
             res["ransomware_prediction"] = {
@@ -292,7 +348,7 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
                 "family": eval_family,
                 "confidence": round(0.92 + (computed_risk * 0.07), 3) if is_r else 0.998
             }
-            
+
             risk_level_str = res.get("risk_level", res.get("risk_tier", "MINIMAL"))
             res["risk_level"] = risk_level_str
 
@@ -307,7 +363,7 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
                 "XRP": "Drops"
             }
             unit_name = unit_map.get(blockchain, "Units")
-            
+
             chain = [
                 f"Target Feed: {blockchain} Network | Selected Engine: {model_name}",
                 f"Model evaluation probability score: {(computed_risk * 100):.1f}% ({risk_level_str} RISK)",
@@ -321,7 +377,7 @@ class ServingAPIHandler(BaseHTTPRequestHandler):
                 chain.append(f"Threat Signature Match: {eval_family}")
             else:
                 chain.append(f"Clean Status: No threat signatures or anomalous graph drifts identified on {blockchain}")
-                
+
             res["evidence_chain"] = chain
             self._send_response_json({"status": "success", "risk_assessment": res})
 

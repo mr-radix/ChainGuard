@@ -38,6 +38,17 @@
   <!-- App Layout Container -->
   <main class="app-container">
 
+    <!-- Demo Evaluation Notice Banner -->
+    <div style="background: rgba(255, 170, 0, 0.12); border: 1px solid rgba(255, 170, 0, 0.35); border-radius: 8px; padding: 0.75rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffca28" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span style="font-size: 0.85rem; color: #ffca28; font-weight: 500;">
+          <strong>DEMO NOTICE:</strong> ChainGuard Threat Intelligence Platform is for research, demonstration, and evaluation purposes only. All inputs are strictly validated.
+        </span>
+      </div>
+      <span style="font-size: 0.75rem; color: var(--text-secondary); background: rgba(0, 0, 0, 0.25); padding: 0.25rem 0.6rem; border-radius: 4px; white-space: nowrap;">Evaluation Environment</span>
+    </div>
+
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('scanner')">
@@ -121,6 +132,35 @@
                 Scan Address Threat Payload
               </button>
             </form>
+
+            <!-- Preset Guidance & Parameter Explanation Card -->
+            <div style="margin-top: 1.25rem; background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 8px; padding: 0.9rem 1.1rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <h4 style="margin: 0; font-size: 0.85rem; color: var(--accent-green); font-weight: 600;">Recommended Benchmark Configuration & Parameter Bases</h4>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0 0 0.6rem 0; line-height: 1.4;">
+                Click <strong>"Load Ransomware Sample"</strong> to populate recommended test parameters. Below is how each input parameter directly influences the threat engine calculation:
+              </p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; font-size: 0.76rem; color: var(--text-primary);">
+                <div style="background: rgba(0, 0, 0, 0.2); padding: 0.5rem 0.7rem; border-radius: 5px;">
+                  <strong style="color: var(--accent-blue);">Blockchain Target:</strong> Bitcoin (BTC) - UTXO Graph<br>
+                  <span style="color: var(--text-secondary); font-size: 0.72rem;">Sets standard UTXO flow normalization and Satoshi transaction units.</span>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.2); padding: 0.5rem 0.7rem; border-radius: 5px;">
+                  <strong style="color: var(--accent-blue);">Target Model:</strong> XGBoost Dual-Head Classifier<br>
+                  <span style="color: var(--text-secondary); font-size: 0.72rem;">Supervised tabular model trained on BitcoinHeist ransomware data.</span>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.2); padding: 0.5rem 0.7rem; border-radius: 5px;">
+                  <strong style="color: var(--accent-blue);">Income (Sats):</strong> 2,500,000,000 (~25 BTC)<br>
+                  <span style="color: var(--text-secondary); font-size: 0.72rem;">High volume exposure factor contributing to financial impact weight.</span>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.2); padding: 0.5rem 0.7rem; border-radius: 5px;">
+                  <strong style="color: var(--accent-blue);">Loop Count:</strong> 4 Hops | <strong style="color: var(--accent-blue);">Tx Count:</strong> 42 Txs<br>
+                  <span style="color: var(--text-secondary); font-size: 0.72rem;">Loop &gt; 2 triggers peel-chain detection; Tx &gt; 30 triggers fan-out dispersion heuristic.</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

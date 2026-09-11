@@ -49,18 +49,18 @@ SERVER_PID=$!
 sleep 3
 
 echo -e "Testing GET /health..."
-curl -s -f http://localhost:$TEST_PORT/health | grep -q "ok"
-echo -e "${GREEN}✓ /health returned OK.${NC}"
+curl -s -f http://localhost:$TEST_PORT/health | grep -q "healthy"
+echo -e "${GREEN}✓ /health returned healthy status.${NC}"
 
 echo -e "Testing GET /models..."
-curl -s -f http://localhost:$TEST_PORT/models | grep -q "xgboost_ransomware"
+curl -s -f http://localhost:$TEST_PORT/models | grep -q "tabular_models"
 echo -e "${GREEN}✓ /models returned model registry.${NC}"
 
 echo -e "Testing POST /predict/ransomware..."
 curl -s -f -X POST http://localhost:$TEST_PORT/predict/ransomware \
     -H "Content-Type: application/json" \
     -d '{"address":"13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94","income":2500000000,"loop":4,"count":42,"length":10,"weight":0.5,"neighbors":8}' \
-    | grep -q "status"
+    | grep -q "ransomware_risk_score"
 echo -e "${GREEN}✓ /predict/ransomware prediction successful.${NC}"
 
 echo -e "Testing POST /predict/risk..."
@@ -69,6 +69,18 @@ curl -s -f -X POST http://localhost:$TEST_PORT/predict/risk \
     -d '{"address":"13AM4VW2dhxYgXeQepoHkHSQuy6NgaEb94","income":2500000000,"loop":4,"count":42,"length":10,"weight":0.5,"neighbors":8}' \
     | grep -q "risk_assessment"
 echo -e "${GREEN}✓ /predict/risk composite evaluation successful.${NC}"
+
+echo -e "Testing Address Format Validation (HTTP 400 Error)..."
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:$TEST_PORT/predict/risk \
+    -H "Content-Type: application/json" \
+    -d '{"address":"john","blockchain":"BTC"}')
+if [ "$HTTP_STATUS" -eq 400 ]; then
+    echo -e "${GREEN}✓ Invalid address ('john') correctly rejected with HTTP 400 Bad Request.${NC}"
+else
+    echo -e "${RED}✗ Address validation check failed (Expected 400, got $HTTP_STATUS)${NC}"
+    kill $SERVER_PID 2>/dev/null
+    exit 1
+fi
 
 # Stop test server cleanly
 set +e
