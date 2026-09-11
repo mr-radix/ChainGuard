@@ -1,0 +1,33 @@
+# Render Blueprint Configuration for ChainGuard
+# Official documentation: https://render.com/docs/blueprint-spec
+# Repository: https://github.com/mr-radix/ChainGuard
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. ChainGuard ML Model REST API Server (Python + PyTorch + GNN)
+  # ----------------------------------------------------------------------------
+  - type: web
+    name: chainguard-model-server
+    env: docker
+    dockerContext: ./deployment/model
+    dockerfilePath: ./deployment/model/Dockerfile
+    plan: starter # Starter plan recommended for ML/PyTorch memory footprint (512MB - 1GB RAM)
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: PYTHONUNBUFFERED
+        value: 1
+    healthCheckPath: /health
+
+  # ----------------------------------------------------------------------------
+  # 2. ChainGuard Web Dashboard (Static Site / Frontend UI)
+  # ----------------------------------------------------------------------------
+  - type: static
+    name: chainguard-web-dashboard
+    buildCommand: echo "Building ChainGuard Static Web Assets..."
+    staticPublishPath: ./deployment/website/src
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

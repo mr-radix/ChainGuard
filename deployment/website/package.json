@@ -1,0 +1,19 @@
+{
+  "name": "chainguard-website",
+  "version": "1.0.0",
+  "description": "ChainGuard Cryptocurrency Threat Detection & Tracing Platform Web Dashboard",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "npx -y http-server@14.1.1 src -p 3000 -c-1 --cors",
+    "test": "node test_website.js"
+  },
+  "dependencies": {
+    "http-server": "14.1.1"
+  },
+  "devDependencies": {
+    "eslint": "8.57.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
