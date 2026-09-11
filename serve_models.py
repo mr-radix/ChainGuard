@@ -66,6 +66,16 @@ def main():
 
     args = parser.parse_args()
 
+    env_port = os.environ.get("PORT")
+    if env_port:
+        try:
+            args.port = int(env_port)
+        except ValueError:
+            pass
+
+    if not args.export_only and not args.serve:
+        args.serve = True
+
     if args.export_only or not os.path.exists(os.path.join(EXPORT_DIR, "model_registry.json")):
         export_small_to_big_models(data_dir=args.data_dir, sample_size=args.sample)
 
