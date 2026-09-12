@@ -206,7 +206,7 @@ The architecture, machine learning models, graph algorithms, and forensic heuris
 4. **A Fistful of Bitcoins: Characterizing Payments Among Men with No Names**
    - **Authors:** Sarah Meiklejohn, Marjori Pomarole, Grant Jordan, Kirill Levchenko, Damon McCoy, Geoffrey M. Voelker, Stefan Savage
    - **Publication:** *ACM Internet Measurement Conference (IMC)*, 2013
-   - **Direct Links:** [ACM Digital Library (DOI: 10.1145/2504730.2504747)](https://doi.org/10.1145/2504730.2504747) \| [PDF Paper Link](https://dreadref.github.io/papers/2013-meiklejohn-fistful.pdf)
+   - **Direct Links:** [ACM Digital Library (DOI: 10.1145/2504730.2504747)](https://doi.org/10.1145/2504730.2504747) \| [PDF Paper Link](https://dl.acm.org/doi/epdf/10.1145/2504730.2504747)
    - **ChainGuard Role:** Foundation for UTXO Common-Input Co-signing Address Clustering (Disjoint Set Union) and heuristic fund-flow pattern detectors such as peel chains, fan-out dispersion, and fan-in consolidation ([`src/graph_analysis.py`](src/graph_analysis.py)).
 
 5. **Isolation Forest**
