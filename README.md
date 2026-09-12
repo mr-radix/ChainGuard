@@ -181,6 +181,48 @@ ChainGuard/
 
 ---
 
+## 📚 References & Research Papers (Inspirations)
+
+The architecture, machine learning models, graph algorithms, and forensic heuristics in **ChainGuard** were built upon and inspired by the following foundational research papers and open datasets:
+
+1. **BitcoinHeist: Topological Feature Extraction Using Bitcoin Ransomware Data**
+   - **Authors:** Cuneyt Gurcan Akcora, Yulia R. Gel, Murat Kantarcioglu
+   - **Publication:** *IEEE Transactions on Knowledge and Data Engineering (TKDE)*, 2020
+   - **Direct Links:** [arXiv:1906.07852](https://arxiv.org/abs/1906.07852) \| [IEEE Xplore (DOI: 10.1109/TKDE.2020.3012579)](https://doi.org/10.1109/TKDE.2020.3012579) \| [PDF](https://arxiv.org/pdf/1906.07852.pdf)
+   - **ChainGuard Role:** Core foundation for address-level topological feature engineering and the dual-head XGBoost ransomware binary detector & 11-family triage classifier ([`src/models/ransomware_model.py`](src/models/ransomware_model.py)).
+
+2. **Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics**
+   - **Authors:** Mark Weber, Domenic Puzone, Bryan Bo Zhou, Peter Bell, Sergio A. Lopez-Rojas, et al. (IBM Research & MIT-IBM Watson AI Lab)
+   - **Publication:** *KDD 2019 Workshop on Anomaly Detection in Finance*
+   - **Direct Links:** [arXiv:1908.02591](https://arxiv.org/abs/1908.02591) \| [PDF Direct Download](https://arxiv.org/pdf/1908.02591.pdf)
+   - **ChainGuard Role:** Direct inspiration for transaction-level illicit node prediction on dynamic graphs with strict chronological temporal splitting to eliminate data leakage ([`src/models/elliptic_gnn.py`](src/models/elliptic_gnn.py)).
+
+3. **Inductive Representation Learning on Large Graphs (GraphSAGE)**
+   - **Authors:** William L. Hamilton, Rex Ying, Jure Leskovec (Stanford University)
+   - **Publication:** *Advances in Neural Information Processing Systems (NeurIPS)*, 2017
+   - **Direct Links:** [arXiv:1706.02216](https://arxiv.org/abs/1706.02216) \| [NeurIPS Proceedings](https://papers.nips.cc/paper/6703-inductive-representation-learning-on-large-graphs) \| [PDF](https://arxiv.org/pdf/1706.02216.pdf)
+   - **ChainGuard Role:** Architecture powering the PyTorch inductive neighborhood mean-aggregator GNN layer (`GraphSAGELayer` in [`src/models/elliptic_gnn.py`](src/models/elliptic_gnn.py)).
+
+4. **A Fistful of Bitcoins: Characterizing Payments Among Men with No Names**
+   - **Authors:** Sarah Meiklejohn, Marjori Pomarole, Grant Jordan, Kirill Levchenko, Damon McCoy, Geoffrey M. Voelker, Stefan Savage
+   - **Publication:** *ACM Internet Measurement Conference (IMC)*, 2013
+   - **Direct Links:** [ACM Digital Library (DOI: 10.1145/2504730.2504747)](https://doi.org/10.1145/2504730.2504747) \| [PDF Paper Link](https://dreadref.github.io/papers/2013-meiklejohn-fistful.pdf)
+   - **ChainGuard Role:** Foundation for UTXO Common-Input Co-signing Address Clustering (Disjoint Set Union) and heuristic fund-flow pattern detectors such as peel chains, fan-out dispersion, and fan-in consolidation ([`src/graph_analysis.py`](src/graph_analysis.py)).
+
+5. **Isolation Forest**
+   - **Authors:** Fei Tony Liu, Kai Ming Ting, Zhi-Hua Zhou
+   - **Publication:** *IEEE International Conference on Data Mining (ICDM)*, 2008
+   - **Direct Links:** [IEEE Xplore (DOI: 10.1109/ICDM.2008.17)](https://doi.org/10.1109/ICDM.2008.17) \| [PDF Paper Link](https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icdm08b.pdf)
+   - **ChainGuard Role:** Underpins the unsupervised behavioral anomaly index engine for unlabelled zero-day threat discovery ([`src/anomaly_detection.py`](src/anomaly_detection.py)).
+
+6. **XGBoost: A Scalable Tree Boosting System**
+   - **Authors:** Tianqi Chen, Carlos Guestrin
+   - **Publication:** *ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD)*, 2016
+   - **Direct Links:** [arXiv:1603.02754](https://arxiv.org/abs/1603.02754) \| [ACM Digital Library (DOI: 10.1145/2939672.2939785)](https://doi.org/10.1145/2939672.2939785) \| [PDF](https://arxiv.org/pdf/1603.02754.pdf)
+   - **ChainGuard Role:** High-performance class-weighted gradient tree boosting engine used across tabular model spectrum benchmarks ([`src/models/ransomware_model.py`](src/models/ransomware_model.py)).
+
+---
+
 ## 👥 Author & Contributors
 
 - **Lead Developer & Maintainer**: [@mr-radix](https://github.com/mr-radix)
